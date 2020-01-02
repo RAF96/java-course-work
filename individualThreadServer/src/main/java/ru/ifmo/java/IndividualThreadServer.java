@@ -18,7 +18,6 @@ public class IndividualThreadServer implements Runnable {
             return;
         }
 
-        System.out.println("Start server");
 
         try {
             while (!Thread.interrupted()) {
@@ -37,7 +36,5 @@ public class IndividualThreadServer implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Finish server");
     }
 }
