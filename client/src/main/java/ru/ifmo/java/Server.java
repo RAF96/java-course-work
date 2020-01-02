@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 public class Server {
     private final InputStream input;
@@ -17,7 +18,13 @@ public class Server {
     }
 
     public Response send(Request request) throws IOException {
+        int serializedSize = request.getSerializedSize();
+        byte[] outputArray =ByteBuffer.allocate(4).putInt(4).array();
+        output.write(outputArray);
         request.writeDelimitedTo(output);
+
+        byte[] inputArray = new byte[4];
+        input.read(inputArray);
         return Response.parseDelimitedFrom(input);
     }
 }
