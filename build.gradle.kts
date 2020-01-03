@@ -3,7 +3,6 @@ plugins {
     id("com.google.protobuf") version "0.8.10" apply false
 }
 
-group = "ru.ifmo.java"
 version = "1.0-SNAPSHOT"
 
 repositories {

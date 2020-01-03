@@ -1,4 +1,6 @@
-package ru.ifmo.java;
+package ru.ifmo.java.individualThreadServer;
+
+import ru.ifmo.java.common.Constant;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,7 +14,7 @@ public class IndividualThreadServer implements Runnable {
     public void run() {
         ServerSocket serverSocket = null;
         try {
-             serverSocket = new ServerSocket(Constant.serverPort);
+            serverSocket = new ServerSocket(Constant.serverPort);
         } catch (IOException e) {
             e.printStackTrace();
             return;

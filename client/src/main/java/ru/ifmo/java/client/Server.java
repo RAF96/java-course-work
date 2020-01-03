@@ -1,6 +1,7 @@
-package ru.ifmo.java;
+package ru.ifmo.java.client;
 
-import ru.ifmo.java.common.protocol.Protocol.*;
+import ru.ifmo.java.common.protocol.Protocol.Request;
+import ru.ifmo.java.common.protocol.Protocol.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +20,12 @@ public class Server {
 
     public Response send(Request request) throws IOException {
         int serializedSize = request.getSerializedSize();
-        byte[] outputArray =ByteBuffer.allocate(4).putInt(4).array();
+        byte[] outputArray = ByteBuffer.allocate(4).putInt(serializedSize).array();
         output.write(outputArray);
-        request.writeDelimitedTo(output);
+        request.writeTo(output);
 
         byte[] inputArray = new byte[4];
         input.read(inputArray);
-        return Response.parseDelimitedFrom(input);
+        return Response.parseFrom(input);
     }
 }

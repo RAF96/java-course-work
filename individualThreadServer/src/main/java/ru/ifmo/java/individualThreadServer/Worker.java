@@ -1,7 +1,8 @@
-package ru.ifmo.java;
+package ru.ifmo.java.individualThreadServer;
 
-import ru.ifmo.java.algorithm.Sort;
-import ru.ifmo.java.common.protocol.Protocol.*;
+import ru.ifmo.java.common.algorithm.Sort;
+import ru.ifmo.java.common.protocol.Protocol.Request;
+import ru.ifmo.java.common.protocol.Protocol.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +11,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-public class Worker implements Runnable{
+public class Worker implements Runnable {
     private final InputStream input;
     private final OutputStream output;
     private final Socket socket;
@@ -27,7 +28,7 @@ public class Worker implements Runnable{
             while (!socket.isClosed()) {
                 byte[] inputArray = new byte[4];
                 input.read(inputArray);
-                Request request = Request.parseDelimitedFrom(input);
+                Request request = Request.parseFrom(input);
 
                 List<Integer> list = Sort.sort(request.getNumberList());
                 Response response = Response.newBuilder()
@@ -37,7 +38,7 @@ public class Worker implements Runnable{
                 int serializedSize = response.getSerializedSize();
                 byte[] outputArray = ByteBuffer.allocate(4).putInt(serializedSize).array();
                 output.write(outputArray);
-                response.writeDelimitedTo(output);
+                response.writeTo(output);
             }
         } catch (IOException ignored) {
         }

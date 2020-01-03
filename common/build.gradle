@@ -15,12 +15,12 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
 
 dependencies {
-    compile 'com.google.protobuf:protobuf-java:3.0.0'
+    compile 'com.google.protobuf:protobuf-java:3.8.0'
     compile 'io.grpc:grpc-stub:1.0.0-pre2'
     compile 'io.grpc:grpc-protobuf:1.0.0-pre2'
     if (JavaVersion.current().isJava9Compatible()) {
@@ -58,7 +58,7 @@ protobuf {
             // options.  Note the braces cannot be omitted, otherwise the
             // plugin will not be added. This is because of the implicit way
             // NamedDomainObjectContainer binds the methods.
-            grpc { }
+            grpc {}
         }
     }
 }

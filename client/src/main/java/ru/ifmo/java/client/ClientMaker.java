@@ -1,4 +1,4 @@
-package ru.ifmo.java;
+package ru.ifmo.java.client;
 
 import java.io.IOException;
 

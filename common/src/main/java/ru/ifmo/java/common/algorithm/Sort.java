@@ -1,4 +1,4 @@
-package ru.ifmo.java.algorithm;
+package ru.ifmo.java.common.algorithm;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.ifmo.java;
+package ru.ifmo.java.common;
 
 public class DefaultSetting {
     public static int sizeOfArrayInRequest = 1;

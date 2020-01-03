@@ -1,6 +1,9 @@
-package ru.ifmo.java;
+package ru.ifmo.java.client;
 
-import ru.ifmo.java.common.protocol.Protocol.*;
+import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.DefaultSetting;
+import ru.ifmo.java.common.protocol.Protocol.Request;
+import ru.ifmo.java.common.protocol.Protocol.Response;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -8,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Thread.sleep;
-
-public class Client implements Runnable{
+public class Client implements Runnable {
 
     private final Random rand;
     private final Server server;
@@ -22,9 +23,14 @@ public class Client implements Runnable{
         server = new Server(socket);
     }
 
+    private static boolean check(List<Integer> list) {
+        System.out.println("Ok");
+        return true; //MOCK
+    }
+
     @Override
     public void run() {
-        for (int i = 0; i < DefaultSetting.numberOfRequestByClient; i++){
+        for (int i = 0; i < DefaultSetting.numberOfRequestByClient; i++) {
             sendOneRequest();
         }
     }
@@ -32,6 +38,7 @@ public class Client implements Runnable{
     private void sendOneRequest() {
         List<Integer> list = generateRandomValues();
         Request request = Request.newBuilder()
+                .addAllNumber(list)
                 .build();
 
         try {
@@ -46,11 +53,6 @@ public class Client implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private static boolean check(List<Integer> list) {
-        System.out.println("Ok");
-        return true; //MOCK
     }
 
     private List<Integer> generateRandomValues() {
