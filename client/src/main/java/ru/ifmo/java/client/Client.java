@@ -7,6 +7,7 @@ import ru.ifmo.java.common.protocol.Protocol.Response;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -24,9 +25,9 @@ public class Client implements Runnable {
         server = new Server(socket);
     }
 
-    private static boolean check(List<Integer> list) {
-        System.out.println("Ok");
-        return true; //MOCK
+    private static boolean check(List<Integer> listFromClient, List<Integer> listFromServer) {
+        Collections.sort(listFromClient);
+        return (!listFromServer.equals(listFromClient));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class Client implements Runnable {
 
         try {
             Response response = server.send(request);
-            check(response.getNumberList());
+            assert check(list, response.getNumberList());
         } catch (IOException e) {
             e.printStackTrace(); // io problems with one request
         }

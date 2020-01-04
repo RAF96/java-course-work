@@ -8,7 +8,8 @@ import ru.ifmo.java.notBlockingServer.NotBlockingServer;
 public class RunOneTest {
 
     public static void main(String... args) throws InterruptedException {
-        //runDefaultNotBlockingServer();
+        runDefaultNotBlockingServer();
+        runDefaultNotBlockingServer();
     }
 
     private static void runDefaultIndividualThreadServer() throws InterruptedException {

@@ -2,6 +2,7 @@ package ru.ifmo.java.notBlockingServer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -18,7 +19,8 @@ public class WriteThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (!Thread.interrupted()) {
+            while (!Thread.interrupted() && selector.isOpen()) {
+                selector.selectNow();
                 Set<SelectionKey> keys = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = keys.iterator();
 
@@ -28,11 +30,12 @@ public class WriteThread implements Runnable {
                     SocketChannel channel = (SocketChannel) key.channel();
                     channel.write(buffer);
                     if (!buffer.hasRemaining()) {
+                        key.cancel();
                         iterator.remove();
                     }
                 }
             }
-        } catch (IOException ignored) {
+        } catch (IOException | ClosedSelectorException ignored) {
         }
     }
 }

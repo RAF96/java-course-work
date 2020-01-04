@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class WorkerFactory {
+public class WorkerFactory implements AutoCloseable {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(Constant.numberThreadOfServerPool);
     private final Selector writeSelector;
@@ -21,4 +21,8 @@ public class WorkerFactory {
         executorService.submit(new Worker(list, socketChannel, writeSelector));
     }
 
+    @Override
+    public void close() {
+        executorService.shutdown();
+    }
 }

@@ -5,11 +5,9 @@ import ru.ifmo.java.common.protocol.Protocol.Request;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,10 +26,13 @@ public class ReadThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (!Thread.interrupted()) {
+            while (!Thread.interrupted() && selector.isOpen()) {
+                selector.selectNow();
                 Set<SelectionKey> keys = selector.selectedKeys();
+                Iterator<SelectionKey> iterator = keys.iterator();
 
-                for (SelectionKey key : keys) {
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
                     SocketChannel channel = (SocketChannel) key.channel();
 
                     if (!sizeLastMessage.containsKey(channel)) {
@@ -39,21 +40,22 @@ public class ReadThread implements Runnable {
                     }
 
                     if (buffers.containsKey(channel)) {
-                        readMessage(key, channel);
+                        readMessage(key, channel, iterator);
                     }
                 }
             }
-        } catch (IOException ignored) {
+        } catch (IOException | ClosedSelectorException ignored) {
         }
     }
 
-    private void readMessage(SelectionKey key, SocketChannel channel) throws IOException {
+    private void readMessage(SelectionKey key, SocketChannel channel, Iterator<SelectionKey> iterator) throws IOException {
         ByteBuffer byteBuffer = buffers.get(channel);
         channel.read(byteBuffer);
 
         if (!byteBuffer.hasRemaining()) {
             Request request = Request.parseFrom(byteBuffer.array());
             workerFactory.addWorker(channel, request.getNumberList());
+            iterator.remove();
             clear(channel);
         }
     }

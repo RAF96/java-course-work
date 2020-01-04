@@ -12,7 +12,7 @@ import java.nio.channels.SocketChannel;
 public class ServerSocketThread implements Runnable {
     private final Selector readSelector;
     private final Selector writeSelector;
-    private final InetSocketAddress inetSocketAddress = new InetSocketAddress(Constant.serverHost, Constant.serverPort);
+    private final InetSocketAddress inetSocketAddress = new InetSocketAddress(Constant.serverPort);
 
     public ServerSocketThread(Selector readSelector, Selector writeSelector) {
         this.readSelector = readSelector;
@@ -24,7 +24,7 @@ public class ServerSocketThread implements Runnable {
         ServerSocketChannel serverSocketChannel = null;
         try {
             serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.bind(inetSocketAddress);
+            serverSocketChannel.socket().bind(inetSocketAddress);
             serverSocketChannel.configureBlocking(false);
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,9 +44,9 @@ public class ServerSocketThread implements Runnable {
         } finally {
             try {
                 serverSocketChannel.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
         }
+
     }
 }
