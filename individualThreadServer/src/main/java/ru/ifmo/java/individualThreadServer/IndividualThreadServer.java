@@ -5,6 +5,7 @@ import ru.ifmo.java.common.Constant;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class IndividualThreadServer implements Runnable {
 
@@ -15,6 +16,7 @@ public class IndividualThreadServer implements Runnable {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(Constant.serverPort);
+            serverSocket.setSoTimeout(Constant.serverSocketTimeout);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -23,11 +25,14 @@ public class IndividualThreadServer implements Runnable {
 
         try {
             while (!Thread.interrupted()) {
-                Socket socket = serverSocket.accept();
-                Worker worker = new Worker(socket);
-                Thread thread = new Thread(worker);
-                thread.setDaemon(true);
-                thread.start();
+                try {
+                    Socket socket = serverSocket.accept();
+                    Worker worker = new Worker(socket);
+                    Thread thread = new Thread(worker);
+                    thread.setDaemon(true);
+                    thread.start();
+                } catch (SocketTimeoutException ignore) {
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -22,13 +22,17 @@ public class Worker implements Runnable {
         this.socket = socket;
     }
 
+    // MOCK, refactor code with naming of variables
     @Override
     public void run() {
         try {
-            while (!socket.isClosed()) {
+            while (!socket.isClosed() && !Thread.interrupted()) {
                 byte[] inputArray = new byte[4];
                 input.read(inputArray);
-                Request request = Request.parseFrom(input);
+                int size = ByteBuffer.wrap(inputArray).getInt();
+                byte[] inputArrayRequest = new byte[size];
+                input.read(inputArrayRequest);
+                Request request = Request.parseFrom(inputArrayRequest);
 
                 List<Integer> list = Sort.sort(request.getNumberList());
                 Response response = Response.newBuilder()

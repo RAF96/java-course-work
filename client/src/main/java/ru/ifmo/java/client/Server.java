@@ -18,6 +18,7 @@ public class Server {
         output = socket.getOutputStream();
     }
 
+    // MOCK, refactor code with naming of variables
     public Response send(Request request) throws IOException {
         int serializedSize = request.getSerializedSize();
         byte[] outputArray = ByteBuffer.allocate(4).putInt(serializedSize).array();
@@ -26,6 +27,10 @@ public class Server {
 
         byte[] inputArray = new byte[4];
         input.read(inputArray);
-        return Response.parseFrom(input);
+        int size = ByteBuffer.wrap(inputArray).getInt();
+        byte[] inputArrayResponse = new byte[size];
+        input.read(inputArrayResponse);
+        Response response = Response.parseFrom(inputArrayResponse);
+        return response;
     }
 }

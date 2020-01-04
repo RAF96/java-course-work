@@ -1,7 +1,6 @@
 package ru.ifmo.java.client;
 
 import ru.ifmo.java.common.Constant;
-import ru.ifmo.java.common.DefaultSetting;
 import ru.ifmo.java.common.protocol.Protocol.Request;
 import ru.ifmo.java.common.protocol.Protocol.Response;
 
@@ -16,8 +15,10 @@ public class Client implements Runnable {
     private final Random rand;
     private final Server server;
     private final Socket socket;
+    private final ClientsSettings.ClientSettings clientSettings;
 
-    public Client() throws IOException {
+    public Client(ClientsSettings.ClientSettings clientSettings) throws IOException {
+        this.clientSettings = clientSettings;
         rand = new Random();
         socket = new Socket(Constant.serverHost, Constant.serverPort);
         server = new Server(socket);
@@ -30,8 +31,15 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < DefaultSetting.numberOfRequestByClient; i++) {
-            sendOneRequest();
+        try {
+            for (int i = 0; i < clientSettings.numberOfRequestByClient; i++) {
+                sendOneRequest();
+            }
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -49,7 +57,7 @@ public class Client implements Runnable {
         }
 
         try {
-            Thread.sleep(DefaultSetting.sleepTimeAfterResponse);
+            Thread.sleep(clientSettings.sleepTimeAfterResponse);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -57,7 +65,7 @@ public class Client implements Runnable {
 
     private List<Integer> generateRandomValues() {
         List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < DefaultSetting.sizeOfArrayInRequest; i++) {
+        for (int i = 0; i < clientSettings.sizeOfArrayInRequest; i++) {
             list.add(rand.nextInt());
         }
         return list;
