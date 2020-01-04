@@ -5,28 +5,9 @@ import ru.ifmo.java.client.ClientsSettings;
 import ru.ifmo.java.individualThreadServer.IndividualThreadServer;
 import ru.ifmo.java.notBlockingServer.NotBlockingServer;
 
-public class RunOneTest {
+public class RunOneCase {
 
-    public static void main(String... args) throws InterruptedException {
-        runDefaultNotBlockingServer();
-        runDefaultNotBlockingServer();
-    }
-
-    private static void runDefaultIndividualThreadServer() throws InterruptedException {
-        RunSettings runSettings = new RunSettings();
-        runSettings.serverType = RunSettings.ServerType.INDIVIDUAL_THREAD_SERVER;
-        runSettings.clientsSettings = new ClientsSettings();
-        runTest(runSettings);
-    }
-
-    private static void runDefaultNotBlockingServer() throws InterruptedException {
-        RunSettings runSettings = new RunSettings();
-        runSettings.serverType = RunSettings.ServerType.NOT_BLOCKING_SERVER;
-        runSettings.clientsSettings = new ClientsSettings();
-        runTest(runSettings);
-    }
-
-    public static void runTest(RunSettings settings) throws InterruptedException {
+    public static void runCase(RunSettings settings) throws InterruptedException {
         Thread serverThread;
         switch (settings.serverType) {
             case NOT_BLOCKING_SERVER:

@@ -27,7 +27,7 @@ public class Client implements Runnable {
 
     private static boolean check(List<Integer> listFromClient, List<Integer> listFromServer) {
         Collections.sort(listFromClient);
-        return (!listFromServer.equals(listFromClient));
+        return listFromServer.equals(listFromClient);
     }
 
     @Override
