@@ -2,6 +2,7 @@ package ru.ifmo.java.notBlockingServer;
 
 import ru.ifmo.java.common.algorithm.Sort;
 import ru.ifmo.java.common.protocol.Protocol.Response;
+import ru.ifmo.java.common.utils.OperationWithMessage;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -28,10 +29,8 @@ public class Worker implements Runnable {
                 .addAllNumber(sortedList)
                 .build();
 
-        int serializedSize = response.getSerializedSize();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4 + serializedSize)
-                .putInt(serializedSize).put(response.toByteArray());
-
+        byte[] bytes = OperationWithMessage.packMessage(response.toByteArray());
+        ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length).put(bytes);
         byteBuffer.flip();
 
         try {
