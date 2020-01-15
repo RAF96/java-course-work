@@ -7,6 +7,9 @@ public class RunSettings {
 
     public ClientsSettings clientsSettings;
 
+    public RunSettings() {
+    }
+
     public RunSettings(ServerType serverType, ClientsSettings clientsSettings) {
         this.serverType = serverType;
         this.clientsSettings = clientsSettings;

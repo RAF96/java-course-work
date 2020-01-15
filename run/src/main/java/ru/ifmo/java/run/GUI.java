@@ -7,7 +7,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ru.ifmo.java.client.ClientsSettings;
 import ru.ifmo.java.common.utils.Point;
@@ -34,10 +37,10 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-          this.stage = stage;
-          Scene scene = new Scene(getAll());
-          stage.setScene(scene);
-          stage.show();
+        this.stage = stage;
+        Scene scene = new Scene(getAll());
+        stage.setScene(scene);
+        stage.show();
     }
 
     private BorderPane getAll() {
