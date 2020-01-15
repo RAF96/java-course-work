@@ -1,4 +1,4 @@
-package ru.ifmo.java.run;
+package ru.ifmo.java.run.utils;
 
 import ru.ifmo.java.blockingServer.BlockingServer;
 import ru.ifmo.java.client.ClientMaker;

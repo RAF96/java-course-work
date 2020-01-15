@@ -2,6 +2,8 @@ package ru.ifmo.java.run;
 
 import org.junit.Test;
 import ru.ifmo.java.client.ClientsSettings;
+import ru.ifmo.java.run.utils.RunOneCase;
+import ru.ifmo.java.run.utils.RunSettings;
 
 public class RunOneCaseTest {
 
