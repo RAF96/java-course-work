@@ -27,6 +27,18 @@ public class RunOneCaseTest {
         runDefaultNotBlockingServer();
     }
 
+    @Test
+    public void runDefaultBlockingServerTest() throws InterruptedException {
+        runDefaultBlockingServer();
+    }
+
+    @Test
+    public void doubleRunDefaultBlockingServerTest() throws InterruptedException {
+        runDefaultBlockingServer();
+        runDefaultBlockingServer();
+    }
+
+
     public void runDefaultIndividualThreadServer() throws InterruptedException {
         RunSettings runSettings = new RunSettings();
         runSettings.serverType = RunSettings.ServerType.INDIVIDUAL_THREAD_SERVER;
@@ -37,6 +49,13 @@ public class RunOneCaseTest {
     public void runDefaultNotBlockingServer() throws InterruptedException {
         RunSettings runSettings = new RunSettings();
         runSettings.serverType = RunSettings.ServerType.NOT_BLOCKING_SERVER;
+        runSettings.clientsSettings = new ClientsSettings();
+        RunOneCase.runCase(runSettings);
+    }
+
+    public void runDefaultBlockingServer() throws InterruptedException {
+        RunSettings runSettings = new RunSettings();
+        runSettings.serverType = RunSettings.ServerType.BLOCKING_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
         RunOneCase.runCase(runSettings);
     }

@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     testCompile("junit", "junit", "4.12")
+    implementation(project(":common"))
 }
 
 configure<JavaPluginConvention> {

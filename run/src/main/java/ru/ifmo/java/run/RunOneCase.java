@@ -1,5 +1,6 @@
 package ru.ifmo.java.run;
 
+import ru.ifmo.java.blockingServer.BlockingServer;
 import ru.ifmo.java.client.ClientMaker;
 import ru.ifmo.java.client.ClientsSettings;
 import ru.ifmo.java.individualThreadServer.IndividualThreadServer;
@@ -32,13 +33,16 @@ public class RunOneCase {
 
         runClient(settings.clientsSettings);
 
-        assert serverThread != null;
         serverThread.interrupt();
         serverThread.join();
     }
 
     private static Thread runBlockingServer() {
-        return null; // MOCK
+        BlockingServer blockingServer = new BlockingServer();
+        Thread thread = new Thread(blockingServer);
+        thread.setDaemon(true);
+        thread.start();
+        return thread;
     }
 
     private static Thread runNotBlockingServer() {

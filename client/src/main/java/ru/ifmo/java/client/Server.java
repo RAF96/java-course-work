@@ -20,6 +20,6 @@ public class Server {
 
     public Response send(Request request) throws IOException {
         output.write(OperationWithMessage.packMessage(request.toByteArray()));
-        return Response.parseFrom(OperationWithMessage.readAndUnpackMessage(input));
+        return Response.parseFrom(OperationWithMessage.readAndUnpackMessage(input).array);
     }
 }

@@ -11,12 +11,56 @@ public class OperationWithMessage {
         return ByteBuffer.allocate(4 + message.length).putInt(serializedSize).put(message).array();
     }
 
-    public static byte[] readAndUnpackMessage(InputStream inputStream) throws IOException {
+    public static Message readAndUnpackMessage(InputStream inputStream) throws IOException {
         byte[] inputArray = new byte[4];
-        inputStream.read(inputArray);
-        int size = ByteBuffer.wrap(inputArray).getInt();
-        byte[] inputArrayResponse = new byte[size];
-        inputStream.read(inputArrayResponse);
-        return inputArrayResponse;
+        int messageHeadSize = inputStream.read(inputArray);
+
+        if (messageHeadSize == -1) {
+            return new Message(null, true);
+        }
+
+        if (messageHeadSize != 4) {
+            throw new WrongSizeOfMessageHeadException("wrong size of message head");
+        }
+
+        int bufferSize = ByteBuffer.wrap(inputArray).getInt();
+        byte[] inputArrayResponse = new byte[bufferSize];
+        int messageBodySize = inputStream.read(inputArrayResponse);
+        if (messageBodySize != bufferSize) {
+            throw new WrongSizeOfMessageHeadException("wrong size of message body");
+        }
+
+        return new Message(inputArrayResponse, false);
     }
+
+    public static class Message {
+        public final byte[] array;
+        public final boolean endOfInputStream;
+
+        public Message(byte[] array, boolean endOfInputStream) {
+            this.array = array;
+            this.endOfInputStream = endOfInputStream;
+        }
+    }
+
+    public static class WrongSizeOfMessageHeadException extends RuntimeException {
+        public WrongSizeOfMessageHeadException() {
+        }
+
+        public WrongSizeOfMessageHeadException(String message) {
+            super(message);
+        }
+    }
+
+    public static class WrongSizeOfMessageBodyException extends RuntimeException {
+        public WrongSizeOfMessageBodyException() {
+        }
+
+        public WrongSizeOfMessageBodyException(String message) {
+            super(message);
+        }
+
+    }
+
+
 }
