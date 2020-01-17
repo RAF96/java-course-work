@@ -32,10 +32,15 @@ public class RunOneClientsBunch {
     }
 
     private static void filesOperation(RunSettings settings) {
+        MetricsWriter.clean();
+
         if (!Constant.metricsPath.toFile().exists()) {
             Constant.metricsPath.toFile().mkdirs();
         }
-        MetricsWriter.clean();
+
+        if (!Constant.metricsPathForOneClient.toFile().exists()) {
+            Constant.metricsPathForOneClient.toFile().mkdirs();
+        }
 
         try {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
