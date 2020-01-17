@@ -8,7 +8,7 @@ public class Constant {
     public static final String serverHost = "localhost";
     public static final int numberThreadOfServerPool = 1;
     public static final int serverSocketTimeout = 1 * 1000;
-    public static final Path metricsPath = Path.of("../data/metrics");
+    public static final Path metricsPath = Path.of("data/metrics");
     public static final int individualThreadServerPort = 8081;
     public static final int blockingServerPort = 8082;
     public static final int notBlockingServerPort = 8083;

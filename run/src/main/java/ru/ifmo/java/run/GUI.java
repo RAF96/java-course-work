@@ -107,6 +107,11 @@ public class GUI extends Application {
         radioButton3.setText("Number of request by client");
         radioButton3.setToggleGroup(toggleGroup);
 
+
+        RadioButton radioButton4 = new RadioButton();
+        radioButton4.setText("Nothing");
+        radioButton4.setToggleGroup(toggleGroup);
+
         settingsChanges.add(new Consumer<RunSettings>() {
             @Override
             public void accept(RunSettings runSettings) {
@@ -117,13 +122,15 @@ public class GUI extends Application {
                     runSettings.typeOfVariableToChange = TypeOfVariableToChange.SLEEP_TIME_AFTER_RESPONSE;
                 } else if (radioButton3.equals(selectedToggle)) {
                     runSettings.typeOfVariableToChange = TypeOfVariableToChange.NUMBER_OF_REQUEST_BY_CLIENT;
+                } else if (radioButton4.equals(selectedToggle)) {
+                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.NONE;
                 } else {
                     throw new RuntimeException("not correct radio button in changeable variable type");
                 }
             }
         });
 
-        vBox.getChildren().addAll(radioButton1, radioButton2, radioButton3);
+        vBox.getChildren().addAll(radioButton1, radioButton2, radioButton3, radioButton4);
         return vBox;
     }
 

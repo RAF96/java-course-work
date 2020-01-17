@@ -2,11 +2,14 @@ package ru.ifmo.java.run.utils;
 
 import ru.ifmo.java.client.ClientMaker;
 import ru.ifmo.java.client.ClientsSettings;
+import ru.ifmo.java.client.metrics.MetricsWriter;
 import ru.ifmo.java.common.enums.TypeOfVariableToChange;
 
 public class RunOneClientsBunch {
 
     public static void runCase(RunSettings settings) throws InterruptedException {
+        MetricsWriter.clean();
+
         ClientsSettings clientsSettings = settings.clientsSettings;
         if (settings.typeOfVariableToChange == TypeOfVariableToChange.NONE) {
             runClient(clientsSettings);
