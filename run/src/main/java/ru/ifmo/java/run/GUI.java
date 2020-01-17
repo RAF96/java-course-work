@@ -69,7 +69,7 @@ public class GUI extends Application {
     // MOCK
     private Node getSettingsShow() {
         Label label = new Label();
-        label.setText("App for launching clients and show stats");
+        label.setText("App for launching clients and showing stats");
         return label;
     }
 

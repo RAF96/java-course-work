@@ -6,6 +6,7 @@ import org.junit.Test;
 import ru.ifmo.java.client.ClientsSettings;
 import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.enums.ServerType;
+import ru.ifmo.java.common.enums.TypeOfVariableToChange;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
 import ru.ifmo.java.run.utils.RunSettings;
 
@@ -62,6 +63,7 @@ public class RunOneClientsBunchTest {
         runSettings.serverType = ServerType.INDIVIDUAL_THREAD_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
         runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        runSettings.typeOfVariableToChange = TypeOfVariableToChange.NONE;
         RunOneClientsBunch.runCase(runSettings);
     }
 
@@ -70,6 +72,7 @@ public class RunOneClientsBunchTest {
         runSettings.serverType = ServerType.NOT_BLOCKING_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
         runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        runSettings.typeOfVariableToChange = TypeOfVariableToChange.NONE;
         RunOneClientsBunch.runCase(runSettings);
     }
 
@@ -78,6 +81,7 @@ public class RunOneClientsBunchTest {
         runSettings.serverType = ServerType.BLOCKING_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
         runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        runSettings.typeOfVariableToChange = TypeOfVariableToChange.NONE;
         RunOneClientsBunch.runCase(runSettings);
     }
 }
