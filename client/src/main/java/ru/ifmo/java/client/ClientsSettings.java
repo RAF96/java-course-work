@@ -4,6 +4,7 @@ public class ClientsSettings {
 
     public int numberOfClients = 2;
     public ClientSettings clientSettings = new ClientSettings();
+    public int serverPort = -1;
 
     public static class ClientSettings {
         public int sizeOfArrayInRequest = 1;

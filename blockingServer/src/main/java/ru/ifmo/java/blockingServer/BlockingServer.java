@@ -10,7 +10,7 @@ public class BlockingServer implements Runnable {
     public void run() {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(Constant.serverPort);
+            serverSocket = new ServerSocket(Constant.blockingServerPort);
         } catch (IOException e) {
             e.printStackTrace();
             return;

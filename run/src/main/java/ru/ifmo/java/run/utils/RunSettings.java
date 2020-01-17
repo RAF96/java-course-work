@@ -1,6 +1,8 @@
 package ru.ifmo.java.run.utils;
 
 import ru.ifmo.java.client.ClientsSettings;
+import ru.ifmo.java.common.enums.ChangeVariableType;
+import ru.ifmo.java.common.enums.ServerType;
 
 public class RunSettings {
     public ServerType serverType;
@@ -15,11 +17,5 @@ public class RunSettings {
         this.clientsSettings = clientsSettings;
     }
 
-    public enum ServerType {NOT_BLOCKING_SERVER, BLOCKING_SERVER, INDIVIDUAL_THREAD_SERVER}
-
-    public enum ChangeVariableType {
-        NONE, SIZE_OF_ARRAY_IN_REQUEST,
-        SLEEP_TIME_AFTER_RESPONSE, NUMBER_OF_REQUEST_BY_CLIENT
-    }
 
 }

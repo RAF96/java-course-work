@@ -50,7 +50,6 @@ public class HandlerNewClient implements Runnable {
             readThread.join();
         } catch (InterruptedException ignored) {
         } finally {
-            threadPool.shutdown();
             executorServiceWriteThread.shutdown();
             readThread.interrupt();
 

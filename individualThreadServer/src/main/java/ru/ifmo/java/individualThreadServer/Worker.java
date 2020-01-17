@@ -26,7 +26,12 @@ public class Worker implements Runnable {
     public void run() {
         try {
             while (!socket.isClosed() && !Thread.interrupted()) {
-                Request request = Request.parseFrom(OperationWithMessage.readAndUnpackMessage(input).array);
+                OperationWithMessage.Message message = OperationWithMessage.readAndUnpackMessage(input);
+                if (message.endOfInputStream) {
+                    socket.close();
+                    return;
+                }
+                Request request = Request.parseFrom(message.array);
 
                 List<Integer> list = Sort.sort(request.getNumberList());
                 Response response = Response.newBuilder()

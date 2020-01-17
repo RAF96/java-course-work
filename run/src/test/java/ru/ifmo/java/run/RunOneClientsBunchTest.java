@@ -1,11 +1,28 @@
 package ru.ifmo.java.run;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.ifmo.java.client.ClientsSettings;
-import ru.ifmo.java.run.utils.RunOneCase;
+import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.enums.ServerType;
+import ru.ifmo.java.run.utils.RunOneClientsBunch;
+import ru.ifmo.java.run.utils.RunServers;
 import ru.ifmo.java.run.utils.RunSettings;
 
-public class RunOneCaseTest {
+public class RunOneClientsBunchTest {
+
+    private static RunServers runServers;
+
+    @BeforeClass
+    public static void runServers() {
+        runServers = RunServers.getInstance();
+    }
+
+    @AfterClass
+    public static void interruptServers() throws Exception {
+        runServers.close();
+    }
 
     @Test
     public void runDefaultIndividualThreadServerTest() throws InterruptedException {
@@ -43,22 +60,25 @@ public class RunOneCaseTest {
 
     public void runDefaultIndividualThreadServer() throws InterruptedException {
         RunSettings runSettings = new RunSettings();
-        runSettings.serverType = RunSettings.ServerType.INDIVIDUAL_THREAD_SERVER;
+        runSettings.serverType = ServerType.INDIVIDUAL_THREAD_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
-        RunOneCase.runCase(runSettings);
+        runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        RunOneClientsBunch.runCase(runSettings);
     }
 
     public void runDefaultNotBlockingServer() throws InterruptedException {
         RunSettings runSettings = new RunSettings();
-        runSettings.serverType = RunSettings.ServerType.NOT_BLOCKING_SERVER;
+        runSettings.serverType = ServerType.NOT_BLOCKING_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
-        RunOneCase.runCase(runSettings);
+        runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        RunOneClientsBunch.runCase(runSettings);
     }
 
     public void runDefaultBlockingServer() throws InterruptedException {
         RunSettings runSettings = new RunSettings();
-        runSettings.serverType = RunSettings.ServerType.BLOCKING_SERVER;
+        runSettings.serverType = ServerType.BLOCKING_SERVER;
         runSettings.clientsSettings = new ClientsSettings();
-        RunOneCase.runCase(runSettings);
+        runSettings.clientsSettings.serverPort = Constant.getPort(runSettings.serverType);
+        RunOneClientsBunch.runCase(runSettings);
     }
 }

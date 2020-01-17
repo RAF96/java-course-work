@@ -20,6 +20,14 @@ public class Server {
 
     public Response send(Request request) throws IOException {
         output.write(OperationWithMessage.packMessage(request.toByteArray()));
-        return Response.parseFrom(OperationWithMessage.readAndUnpackMessage(input).array);
+        OperationWithMessage.Message message = OperationWithMessage.readAndUnpackMessage(input);
+        if (message.endOfInputStream) {
+            throw new NotGetResponseFromServer();
+        }
+        return Response.parseFrom(message.array);
+    }
+
+    private static class NotGetResponseFromServer extends RuntimeException {
+
     }
 }

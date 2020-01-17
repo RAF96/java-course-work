@@ -18,7 +18,7 @@ public class ClientMaker implements Runnable {
         for (int i = 0; i < clientsSettings.numberOfClients; i++) {
             Client client;
             try {
-                client = new Client(clientsSettings.clientSettings);
+                client = new Client(clientsSettings);
             } catch (IOException e) {
                 e.printStackTrace();
                 return;

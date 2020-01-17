@@ -18,10 +18,10 @@ public class Client implements Runnable {
     private final Socket socket;
     private final ClientsSettings.ClientSettings clientSettings;
 
-    public Client(ClientsSettings.ClientSettings clientSettings) throws IOException {
-        this.clientSettings = clientSettings;
+    public Client(ClientsSettings clientsSettings) throws IOException {
+        this.clientSettings = clientsSettings.clientSettings;
         rand = new Random();
-        socket = new Socket(Constant.serverHost, Constant.serverPort);
+        socket = new Socket(Constant.serverHost, clientsSettings.serverPort);
         server = new Server(socket);
     }
 

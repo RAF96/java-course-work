@@ -27,7 +27,7 @@ public class OperationWithMessage {
         byte[] inputArrayResponse = new byte[bufferSize];
         int messageBodySize = inputStream.read(inputArrayResponse);
         if (messageBodySize != bufferSize) {
-            throw new WrongSizeOfMessageHeadException("wrong size of message body");
+            throw new WrongSizeOfMessageBodyException("wrong size of message body");
         }
 
         return new Message(inputArrayResponse, false);

@@ -12,11 +12,12 @@ import java.nio.channels.SocketChannel;
 public class ServerSocketThread implements Runnable {
     private final Selector readSelector;
     private final Selector writeSelector;
-    private final InetSocketAddress inetSocketAddress = new InetSocketAddress(Constant.serverPort);
+    private final InetSocketAddress inetSocketAddress;
 
     public ServerSocketThread(Selector readSelector, Selector writeSelector) {
         this.readSelector = readSelector;
         this.writeSelector = writeSelector;
+        inetSocketAddress = new InetSocketAddress(Constant.notBlockingServerPort);
     }
 
     @Override

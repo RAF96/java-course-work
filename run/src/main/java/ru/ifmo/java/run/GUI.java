@@ -13,9 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ru.ifmo.java.client.ClientsSettings;
+import ru.ifmo.java.common.enums.ServerType;
 import ru.ifmo.java.common.utils.Point;
 import ru.ifmo.java.run.utils.GUIChart;
-import ru.ifmo.java.run.utils.RunOneCase;
+import ru.ifmo.java.run.utils.RunOneClientsBunch;
 import ru.ifmo.java.run.utils.RunSettings;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.function.Consumer;
 // MOCK. It will be better do some refactoring later
 public class GUI extends Application {
 
-    private RunSettings settings = new RunSettings(RunSettings.ServerType.INDIVIDUAL_THREAD_SERVER, new ClientsSettings());
+    private RunSettings settings = new RunSettings(ServerType.INDIVIDUAL_THREAD_SERVER, new ClientsSettings());
     private Stage stage;
     private BorderPane borderPane;
     private List<Consumer<RunSettings>> settingsChanges = new ArrayList<>();
@@ -92,7 +93,7 @@ public class GUI extends Application {
                 settings = collectSettings();
 
                 try {
-                    RunOneCase.runCase(settings);
+                    RunOneClientsBunch.runCase(settings);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -203,11 +204,11 @@ public class GUI extends Application {
             public void accept(RunSettings runSettings) {
                 Toggle selectedToggle = toggleGroup.getSelectedToggle();
                 if (radioButton1.equals(selectedToggle)) {
-                    runSettings.serverType = RunSettings.ServerType.INDIVIDUAL_THREAD_SERVER;
+                    runSettings.serverType = ServerType.INDIVIDUAL_THREAD_SERVER;
                 } else if (radioButton2.equals(selectedToggle)) {
-                    runSettings.serverType = RunSettings.ServerType.BLOCKING_SERVER;
+                    runSettings.serverType = ServerType.BLOCKING_SERVER;
                 } else if (radioButton3.equals(selectedToggle)) {
-                    runSettings.serverType = RunSettings.ServerType.NOT_BLOCKING_SERVER;
+                    runSettings.serverType = ServerType.NOT_BLOCKING_SERVER;
                 } else {
                     throw new RuntimeException("not correct radio button in server type");
                 }

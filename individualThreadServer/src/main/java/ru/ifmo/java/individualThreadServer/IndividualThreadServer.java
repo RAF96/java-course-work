@@ -15,7 +15,7 @@ public class IndividualThreadServer implements Runnable {
     public void run() {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(Constant.serverPort);
+            serverSocket = new ServerSocket(Constant.individualThreadServerPort);
             serverSocket.setSoTimeout(Constant.serverSocketTimeout);
         } catch (IOException e) {
             e.printStackTrace();
