@@ -7,7 +7,6 @@ import ru.ifmo.java.client.ClientsSettings;
 import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.enums.ServerType;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
-import ru.ifmo.java.run.utils.RunServers;
 import ru.ifmo.java.run.utils.RunSettings;
 
 public class RunOneClientsBunchTest {

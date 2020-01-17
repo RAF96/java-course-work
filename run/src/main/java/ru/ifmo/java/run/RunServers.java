@@ -1,4 +1,4 @@
-package ru.ifmo.java.run.utils;
+package ru.ifmo.java.run;
 
 import ru.ifmo.java.blockingServer.BlockingServer;
 import ru.ifmo.java.individualThreadServer.IndividualThreadServer;
@@ -13,6 +13,18 @@ public class RunServers implements AutoCloseable {
 
     private RunServers() {
         runServers();
+    }
+
+    public static void main(String[] args) {
+        RunServers instance = getInstance();
+        try {
+            instance.individualThreadServer.join();
+            instance.blockingServer.join();
+            instance.notBlockingServer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static synchronized RunServers getInstance() {
