@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":blockingServer"))
     implementation(project(":individualThreadServer"))
     implementation(project(":notBlockingServer"))
+    compile("com.fasterxml.jackson.core:jackson-databind:2.0.1")
 }
 
 configure<JavaPluginConvention> {

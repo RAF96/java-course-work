@@ -3,5 +3,7 @@
 build/
 .build/
 .output/
+data/
+run/data/
 *.iml
 
