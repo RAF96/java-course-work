@@ -24,7 +24,6 @@ public class RunServers implements AutoCloseable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     public static synchronized RunServers getInstance() {

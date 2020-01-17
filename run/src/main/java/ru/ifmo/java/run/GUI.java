@@ -12,8 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ru.ifmo.java.client.ClientsSettings;
+import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.enums.ServerType;
+import ru.ifmo.java.common.enums.TypeOfVariableToChange;
 import ru.ifmo.java.common.utils.Point;
 import ru.ifmo.java.run.utils.GUIChart;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
@@ -24,11 +25,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-// MOCK. It will be better do some refactoring later
+// MOCK. It will be better. Do some refactoring later
 public class GUI extends Application {
 
-    private RunSettings settings = new RunSettings(ServerType.INDIVIDUAL_THREAD_SERVER, new ClientsSettings());
-    private Stage stage;
+    private RunSettings settings = new RunSettings();
     private BorderPane borderPane;
     private List<Consumer<RunSettings>> settingsChanges = new ArrayList<>();
 
@@ -38,7 +38,6 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
         Scene scene = new Scene(getAll());
         stage.setScene(scene);
         stage.show();
@@ -67,18 +66,86 @@ public class GUI extends Application {
         return gridPane;
     }
 
+    // MOCK
     private Node getSettingsShow() {
         Label label = new Label();
-        label.setText(settings.serverType.name());
+        label.setText("App for launching clients and show stats");
         return label;
     }
 
     private Node getUIControls() {
         HBox box = new HBox();
-        box.getChildren().addAll(getTypeOfServer(), getNumberOfClients(),
+        box.getChildren().addAll(getMenuOfChangeableVariableMenu(), getTypeOfServer(), getNumberOfClients(),
                 getTimeBetweenRequest(), getSizeOfArray(),
                 getNumberOfRequestByOneClient(), getRun());
         return box;
+    }
+
+    private Node getMenuOfChangeableVariableMenu() {
+        HBox box = new HBox();
+        box.getChildren().addAll(getWhichVariableChange(), getRangeOfChangeableVariable());
+        return box;
+    }
+
+    private Node getWhichVariableChange() {
+        VBox vBox = new VBox();
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        RadioButton radioButton1 = new RadioButton();
+        radioButton1.setText("Size of array in request");
+        radioButton1.setToggleGroup(toggleGroup);
+        radioButton1.setSelected(true);
+
+
+        RadioButton radioButton2 = new RadioButton();
+        radioButton2.setText("Sleep time after response");
+        radioButton2.setToggleGroup(toggleGroup);
+
+
+        RadioButton radioButton3 = new RadioButton();
+        radioButton3.setText("Number of request by client");
+        radioButton3.setToggleGroup(toggleGroup);
+
+        settingsChanges.add(new Consumer<RunSettings>() {
+            @Override
+            public void accept(RunSettings runSettings) {
+                Toggle selectedToggle = toggleGroup.getSelectedToggle();
+                if (radioButton1.equals(selectedToggle)) {
+                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.SIZE_OF_ARRAY_IN_REQUEST;
+                } else if (radioButton2.equals(selectedToggle)) {
+                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.SLEEP_TIME_AFTER_RESPONSE;
+                } else if (radioButton3.equals(selectedToggle)) {
+                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.NUMBER_OF_REQUEST_BY_CLIENT;
+                } else {
+                    throw new RuntimeException("not correct radio button in changeable variable type");
+                }
+            }
+        });
+
+        vBox.getChildren().addAll(radioButton1, radioButton2, radioButton3);
+        return vBox;
+    }
+
+    private Node getRangeOfChangeableVariable() {
+        VBox vBox = new VBox();
+        Label label = new Label();
+        label.setText("from ... to ... delta ...");
+        TextField textField1 = new TextField("1");
+        TextField textField2 = new TextField("10");
+        TextField textField3 = new TextField("1");
+        vBox.getChildren().addAll(label, textField1, textField2, textField3);
+
+        settingsChanges.add(new Consumer<RunSettings>() {
+            @Override
+            public void accept(RunSettings runSettings) {
+                int min = Integer.parseInt(textField1.getText());
+                int max = Integer.parseInt(textField2.getText());
+                int delta = Integer.parseInt(textField3.getText());
+                runSettings.range = new RunSettings.Range(min, max, delta);
+            }
+        });
+        return vBox;
     }
 
 
@@ -91,7 +158,6 @@ public class GUI extends Application {
             public void handle(ActionEvent actionEvent) {
 
                 settings = collectSettings();
-
                 try {
                     RunOneClientsBunch.runCase(settings);
                 } catch (InterruptedException e) {
@@ -116,7 +182,7 @@ public class GUI extends Application {
         VBox vBox = new VBox();
         Label label = new Label();
         label.setText("numberOfClients");
-        TextField textField = new TextField();
+        TextField textField = new TextField("1");
         vBox.getChildren().addAll(label, textField);
 
         settingsChanges.add(new Consumer<RunSettings>() {
@@ -132,7 +198,7 @@ public class GUI extends Application {
         VBox vBox = new VBox();
         Label label = new Label();
         label.setText("timeBetweenRequest (ms):");
-        TextField textField = new TextField();
+        TextField textField = new TextField("0");
         vBox.getChildren().addAll(label, textField);
 
         settingsChanges.add(new Consumer<RunSettings>() {
@@ -150,7 +216,7 @@ public class GUI extends Application {
         VBox vBox = new VBox();
         Label label = new Label();
         label.setText("numberOfRequestByOneClient:");
-        TextField textField = new TextField();
+        TextField textField = new TextField("2");
         vBox.getChildren().addAll(label, textField);
 
         settingsChanges.add(new Consumer<RunSettings>() {
@@ -166,7 +232,7 @@ public class GUI extends Application {
         VBox vBox = new VBox();
         Label label = new Label();
         label.setText("sizeOfArray:");
-        TextField textField = new TextField();
+        TextField textField = new TextField("10");
         vBox.getChildren().addAll(label, textField);
 
         settingsChanges.add(new Consumer<RunSettings>() {
@@ -205,10 +271,14 @@ public class GUI extends Application {
                 Toggle selectedToggle = toggleGroup.getSelectedToggle();
                 if (radioButton1.equals(selectedToggle)) {
                     runSettings.serverType = ServerType.INDIVIDUAL_THREAD_SERVER;
+                    runSettings.clientsSettings.serverPort = Constant.individualThreadServerPort;
                 } else if (radioButton2.equals(selectedToggle)) {
                     runSettings.serverType = ServerType.BLOCKING_SERVER;
+                    runSettings.clientsSettings.serverPort = Constant.blockingServerPort;
                 } else if (radioButton3.equals(selectedToggle)) {
                     runSettings.serverType = ServerType.NOT_BLOCKING_SERVER;
+                    runSettings.clientsSettings.serverPort = Constant.individualThreadServerPort;
+                    runSettings.clientsSettings.serverPort = Constant.notBlockingServerPort;
                 } else {
                     throw new RuntimeException("not correct radio button in server type");
                 }
