@@ -13,6 +13,7 @@ public class Constant {
     public static final Path metricsPathForOneClient = Path.of("data/metrics/forOneClient");
     public static final Path runSettingsForGUI = Path.of("data/settings_file");
     public static final Path dataPath = Path.of("data");
+    public static final Path dataSavePath = Path.of("dataSave");
 
     public static final int individualThreadServerPort = 8081;
     public static final int blockingServerPort = 8082;

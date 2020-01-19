@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.graalvm.compiler.nodes.virtual.VirtualBoxingNode;
 import ru.ifmo.java.client.metrics.MetricType;
 import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.enums.ServerType;
@@ -21,9 +22,12 @@ import ru.ifmo.java.run.utils.GUIChart;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
 import ru.ifmo.java.run.utils.RunSettings;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -106,8 +110,45 @@ public class GUI extends Application {
         HBox box = new HBox();
         box.getChildren().addAll(getMenuOfChangeableVariableMenu(), getTypeOfServer(), getNumberOfClients(),
                 getTimeBetweenRequest(), getSizeOfArray(),
-                getNumberOfRequestByOneClient(), getRun());
+                getNumberOfRequestByOneClient(), getButtons());
         return box;
+    }
+
+    private Node getButtons() {
+        VBox box = new VBox();
+        box.getChildren().addAll(getRun(), getSave());
+        return box;
+    }
+
+    private Node getSave() {
+        Button button = new Button();
+        button.setText("Save");
+
+        EventHandler<ActionEvent> action = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    String variable = settings.typeOfVariableToChange.name();
+                    String server = settings.serverType.name();
+                    for (MetricType metric : MetricType.values()) {
+                        Path src = Paths.get(Constant.metricsPath.toString(), metric.name());
+                        Path dst = Paths.get(Constant.dataSavePath.toString(), variable, server, metric.name());
+                        if (!dst.toFile().exists()) {
+                            File parentFile = dst.toFile().getParentFile();
+                            if (!parentFile.exists()) {
+                                parentFile.mkdirs();
+                            }
+                            dst.toFile().createNewFile();
+                        }
+                            Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        button.setOnAction(action);
+        return button;
     }
 
     private Node getMenuOfChangeableVariableMenu() {
