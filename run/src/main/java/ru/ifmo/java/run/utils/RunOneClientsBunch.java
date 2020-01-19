@@ -46,7 +46,7 @@ public class RunOneClientsBunch {
                 }
             }
         }
-
+        // System.out.println("MOCK PRINT. END OF RUNNING");
     }
 
     private static void collectStats(int x) throws IOException {

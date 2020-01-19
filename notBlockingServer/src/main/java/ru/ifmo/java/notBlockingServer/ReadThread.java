@@ -1,6 +1,7 @@
 package ru.ifmo.java.notBlockingServer;
 
 
+import ru.ifmo.java.common.protocol.Protocol;
 import ru.ifmo.java.common.protocol.Protocol.Request;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class ReadThread implements Runnable {
     private final Map<Channel, ByteBuffer> buffers = new HashMap<>();
     private final Map<Channel, Integer> sizeLastMessage = new HashMap<>();
     private final Map<Channel, ByteBuffer> sizeLastMessageBuffer = new HashMap<>();
+    private final Map<Channel, Protocol.Response.Timestamps.Builder> timeStampBuilder = new HashMap<>();
 
     public ReadThread(Selector readSelector, WorkerFactory workerFactory) {
         selector = readSelector;
@@ -54,7 +56,7 @@ public class ReadThread implements Runnable {
 
         if (!byteBuffer.hasRemaining()) {
             Request request = Request.parseFrom(byteBuffer.array());
-            workerFactory.addWorker(channel, request.getNumberList());
+            workerFactory.addWorker(channel, request.getNumberList(), timeStampBuilder.get(channel));
             iterator.remove();
             clear(channel);
         }
@@ -64,6 +66,7 @@ public class ReadThread implements Runnable {
         buffers.remove(channel);
         sizeLastMessage.remove(channel);
         sizeLastMessageBuffer.remove(channel);
+        timeStampBuilder.remove(channel);
     }
 
     private void readMessageSize(SocketChannel channel) throws IOException {
@@ -73,6 +76,9 @@ public class ReadThread implements Runnable {
 
         if (!sizeLastMessageBuffer.containsKey(channel)) {
             sizeLastMessageBuffer.put(channel, ByteBuffer.allocate(4));
+            Protocol.Response.Timestamps.Builder builder =
+                    Protocol.Response.Timestamps.newBuilder().setClientProcessingStart(System.currentTimeMillis());
+            timeStampBuilder.put(channel, builder);
         }
 
         ByteBuffer byteBuffer = sizeLastMessageBuffer.get(channel);

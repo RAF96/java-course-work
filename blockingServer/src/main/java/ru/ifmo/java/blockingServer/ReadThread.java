@@ -1,5 +1,6 @@
 package ru.ifmo.java.blockingServer;
 
+import ru.ifmo.java.common.protocol.Protocol;
 import ru.ifmo.java.common.protocol.Protocol.Request;
 import ru.ifmo.java.common.utils.OperationWithMessage;
 
@@ -24,7 +25,10 @@ public class ReadThread implements Runnable {
 
                 byte[] bytes = message.array;
                 Request request = Request.parseFrom(bytes);
-                workerFactory.addWorker(request.getNumberList());
+                Protocol.Response.Timestamps.Builder timestampsBuilder =
+                        Protocol.Response.Timestamps.
+                                newBuilder().setClientProcessingStart(System.currentTimeMillis());
+                workerFactory.addWorker(request.getNumberList(), timestampsBuilder);
             }
         } catch (IOException e) {
             e.printStackTrace();

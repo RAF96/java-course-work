@@ -66,7 +66,7 @@ public class Client implements Runnable {
 
     private void writeTimestampByRequest() throws IOException {
         MetricsWriterForOneClient.write(MetricType.REQUEST_PROCESSING,
-                clientProcessing.delta());
+                requestProcessing.delta());
 
         MetricsWriterForOneClient.write(MetricType.CLIENT_PROCESSING,
                 clientProcessing.delta());

@@ -10,16 +10,20 @@ import java.util.List;
 public class WriteTask implements Runnable {
     private final List<Integer> list;
     private final OutputStream outputStream;
+    private final Response.Timestamps.Builder timestampBuilder;
 
-    public WriteTask(List<Integer> list, OutputStream outputStream) {
+    public WriteTask(List<Integer> list, OutputStream outputStream, Response.Timestamps.Builder timestampBuilder) {
         this.list = list;
         this.outputStream = outputStream;
+        this.timestampBuilder = timestampBuilder;
     }
 
     @Override
     public void run() {
+        timestampBuilder.setClientProcessingFinish(System.currentTimeMillis());
         Response response = Response.newBuilder()
                 .addAllNumber(list)
+                .setTimestamps(timestampBuilder.build())
                 .build();
 
         try {

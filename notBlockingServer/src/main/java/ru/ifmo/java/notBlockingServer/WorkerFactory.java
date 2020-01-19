@@ -1,6 +1,7 @@
 package ru.ifmo.java.notBlockingServer;
 
 import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.protocol.Protocol;
 
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -17,8 +18,8 @@ public class WorkerFactory implements AutoCloseable {
         this.writeSelector = writeSelector;
     }
 
-    public void addWorker(SocketChannel socketChannel, List<Integer> list) {
-        executorService.submit(new Worker(list, socketChannel, writeSelector));
+    public void addWorker(SocketChannel socketChannel, List<Integer> list, Protocol.Response.Timestamps.Builder builder) {
+        executorService.submit(new Worker(list, socketChannel, writeSelector, builder));
     }
 
     @Override
