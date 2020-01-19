@@ -26,6 +26,8 @@ public class RunOneClientsBunch {
 
         logger.info("Start run case");
 
+        filesOperation(settings);
+
         ClientsSettings clientsSettings = settings.clientsSettings;
         if (settings.typeOfVariableToChange == TypeOfVariableToChange.NONE) {
             runClient(clientsSettings);
