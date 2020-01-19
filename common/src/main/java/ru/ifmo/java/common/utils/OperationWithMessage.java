@@ -3,8 +3,10 @@ package ru.ifmo.java.common.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OperationWithMessage {
+    private static AtomicInteger countFinishedRequest = new AtomicInteger(0); //MOCK
 
     public static byte[] packMessage(byte[] message) {
         int serializedSize = message.length;
@@ -29,7 +31,7 @@ public class OperationWithMessage {
         if (messageBodySize != bufferSize) {
             throw new WrongSizeOfMessageBodyException("wrong size of message body");
         }
-
+        countFinishedRequest.incrementAndGet();
         return new Message(inputArrayResponse, false);
     }
 

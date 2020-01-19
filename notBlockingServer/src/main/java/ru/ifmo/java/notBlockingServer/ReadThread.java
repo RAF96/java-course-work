@@ -38,12 +38,18 @@ public class ReadThread implements Runnable {
                     SocketChannel channel = (SocketChannel) key.channel();
 
                     if (!sizeLastMessage.containsKey(channel)) {
-                        readMessageSize(channel);
+                        boolean notFinished = readMessageSize(channel);
+                        if (!notFinished) {
+                            key.cancel();
+                            iterator.remove();
+                            continue;
+                        }
                     }
 
                     if (buffers.containsKey(channel)) {
                         readMessage(key, channel, iterator);
                     }
+                    iterator.remove();
                 }
             }
         } catch (IOException | ClosedSelectorException ignored) {
@@ -57,7 +63,6 @@ public class ReadThread implements Runnable {
         if (!byteBuffer.hasRemaining()) {
             Request request = Request.parseFrom(byteBuffer.array());
             workerFactory.addWorker(channel, request.getNumberList(), timeStampBuilder.get(channel));
-            iterator.remove();
             clear(channel);
         }
     }
@@ -69,9 +74,9 @@ public class ReadThread implements Runnable {
         timeStampBuilder.remove(channel);
     }
 
-    private void readMessageSize(SocketChannel channel) throws IOException {
+    private boolean readMessageSize(SocketChannel channel) throws IOException {
         if (sizeLastMessage.containsKey(channel)) {
-            return;
+            return true;
         }
 
         if (!sizeLastMessageBuffer.containsKey(channel)) {
@@ -82,7 +87,11 @@ public class ReadThread implements Runnable {
         }
 
         ByteBuffer byteBuffer = sizeLastMessageBuffer.get(channel);
-        channel.read(byteBuffer);
+        int sizeOfReaded = channel.read(byteBuffer);
+
+        if (sizeOfReaded == -1) {
+            return false;
+        }
 
         if (!byteBuffer.hasRemaining()) {
             byteBuffer.flip();
@@ -90,5 +99,6 @@ public class ReadThread implements Runnable {
             sizeLastMessage.put(channel, size);
             buffers.put(channel, ByteBuffer.allocate(size));
         }
+        return true;
     }
 }

@@ -17,11 +17,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.logging.Logger;
 
 public class RunOneClientsBunch {
 
     public static void runCase(RunSettings settings) throws InterruptedException {
-        filesOperation(settings);
+        Logger logger = Logger.getLogger("global");
+
+        logger.info("Start run case");
 
         ClientsSettings clientsSettings = settings.clientsSettings;
         if (settings.typeOfVariableToChange == TypeOfVariableToChange.NONE) {
@@ -46,7 +49,8 @@ public class RunOneClientsBunch {
                 }
             }
         }
-        // System.out.println("MOCK PRINT. END OF RUNNING");
+
+        logger.info("Finish run case");
     }
 
     private static void collectStats(int x) throws IOException {
