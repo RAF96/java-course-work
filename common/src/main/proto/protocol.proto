@@ -8,4 +8,13 @@ message Request {
 
 message Response {
     repeated int32 number = 1;
+
+    message Timestamps {
+        int64 request_processing_start = 1;
+        int64 request_processing_finish = 2;
+        int64 client_processing_start = 3;
+        int64 client_processing_finish = 4;
+    }
+
+    Timestamps timestamps = 2;
 }

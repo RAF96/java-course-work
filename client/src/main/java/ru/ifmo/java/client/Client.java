@@ -1,11 +1,11 @@
 package ru.ifmo.java.client;
 
 import ru.ifmo.java.client.metrics.MetricType;
-import ru.ifmo.java.client.metrics.MetricsWriter;
-import ru.ifmo.java.client.utils.PairOfTime;
+import ru.ifmo.java.client.metrics.MetricsWriterForOneClient;
 import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.protocol.Protocol.Request;
 import ru.ifmo.java.common.protocol.Protocol.Response;
+import ru.ifmo.java.common.utils.PairOfTime;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -53,21 +53,23 @@ public class Client implements Runnable {
         meanOneRequestByClient.end = System.currentTimeMillis();
 
         try {
-            writeTimestamp();
+            writeTimestampByClient();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void writeTimestamp() throws IOException {
-        MetricsWriter.write(MetricType.MEAN_ONE_REQUEST_BY_CLIENT,
-                (double) meanOneRequestByClient.delta() / clientsSettings.numberOfClients, true);
+    private void writeTimestampByClient() throws IOException {
+        MetricsWriterForOneClient.write(MetricType.MEAN_ONE_REQUEST_BY_CLIENT,
+                (double) meanOneRequestByClient.delta() / clientsSettings.numberOfClients);
+    }
 
-//        MetricsWriter.write(MetricType.REQUEST_PROCESSING,
-//                clientProcessing.delta(), true);
-//
-//        MetricsWriter.write(MetricType.CLIENT_PROCESSING,
-//                clientProcessing.delta(), true);
+    private void writeTimestampByRequest() throws IOException {
+        MetricsWriterForOneClient.write(MetricType.REQUEST_PROCESSING,
+                clientProcessing.delta());
+
+        MetricsWriterForOneClient.write(MetricType.CLIENT_PROCESSING,
+                clientProcessing.delta());
     }
 
     private void sendOneRequest() {
@@ -78,9 +80,16 @@ public class Client implements Runnable {
 
         try {
             Response response = server.send(request);
+            setTimestampFromServer(response);
             assert check(list, response.getNumberList());
         } catch (IOException e) {
             e.printStackTrace(); // io problems with one request
+        }
+
+        try {
+            writeTimestampByRequest();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -88,6 +97,16 @@ public class Client implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setTimestampFromServer(Response response) {
+        Response.Timestamps timestamps = response.getTimestamps();
+
+        requestProcessing.start = timestamps.getRequestProcessingStart();
+        requestProcessing.end = timestamps.getRequestProcessingFinish();
+
+        clientProcessing.start = timestamps.getClientProcessingStart();
+        clientProcessing.end = timestamps.getClientProcessingFinish();
     }
 
     private List<Integer> generateRandomValues() {

@@ -1,4 +1,4 @@
-package ru.ifmo.java.client.utils;
+package ru.ifmo.java.common.utils;
 
 public class PairOfTime {
 

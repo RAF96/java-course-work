@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ru.ifmo.java.client.metrics.MetricType;
 import ru.ifmo.java.common.Constant;
 import ru.ifmo.java.common.enums.ServerType;
 import ru.ifmo.java.common.enums.TypeOfVariableToChange;
@@ -20,10 +21,14 @@ import ru.ifmo.java.run.utils.GUIChart;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
 import ru.ifmo.java.run.utils.RunSettings;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 // MOCK. It will be better. Do some refactoring later
 public class GUI extends Application {
@@ -50,13 +55,37 @@ public class GUI extends Application {
         return borderPane;
     }
 
+
     private Node getCharts() {
         GridPane gridPane = new GridPane();
-        List<Point> points = Arrays.asList(new Point(0, 0), new Point(1, 1)); // MOCK
 
-        Chart individualThreadServerChart = GUIChart.getChart(points, "IndividualThreadServer");
-        Chart blockingServerChart = GUIChart.getChart(points, "BlockingServer");
-        Chart notBlockingServerChart = GUIChart.getChart(points, "NotBlockingServer");
+        Function<MetricType, List<Point>> readListPoint = (MetricType type) -> {
+            Path path = Paths.get(Constant.metricsPath.toString(), type.name());
+            if (!path.toFile().exists()) {
+                return new ArrayList<>();
+            }
+            List<Point> result = new ArrayList<>();
+            try (Scanner scanner = new Scanner(path)) {
+                while (scanner.hasNext()) {
+                    int x = scanner.nextInt();
+                    double y = scanner.nextDouble();
+                    result.add(new Point(x, y));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;
+        };
+
+        Chart individualThreadServerChart =
+                GUIChart.getChart(readListPoint.apply(MetricType.MEAN_ONE_REQUEST_BY_CLIENT),
+                        "MEAN_ONE_REQUEST_BY_CLIENT");
+        Chart blockingServerChart =
+                GUIChart.getChart(readListPoint.apply(MetricType.REQUEST_PROCESSING),
+                        "REQUEST_PROCESSING");
+        Chart notBlockingServerChart =
+                GUIChart.getChart(readListPoint.apply(MetricType.CLIENT_PROCESSING),
+                        "CLIENT_PROCESSING");
 
 
         gridPane.add(getSettingsShow(), 0, 0);
