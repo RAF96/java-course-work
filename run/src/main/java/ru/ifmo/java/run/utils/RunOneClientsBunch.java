@@ -112,10 +112,12 @@ public class RunOneClientsBunch {
             case SIZE_OF_ARRAY_IN_REQUEST:
                 clientsSettings.clientSettings.sizeOfArrayInRequest = value;
                 break;
-            case NUMBER_OF_REQUEST_BY_CLIENT:
-                clientsSettings.clientSettings.numberOfRequestByClient = value;
+            case NUMBER_OF_CLIENTS:
+                clientsSettings.numberOfClients = value;
+                break;
             case SLEEP_TIME_AFTER_RESPONSE:
                 clientsSettings.clientSettings.sleepTimeAfterResponse = value;
+                break;
             default:
                 throw new RuntimeException("change clients setting not defined");
         }

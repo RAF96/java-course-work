@@ -133,7 +133,7 @@ public class GUI extends Application {
 
 
         RadioButton radioButton3 = new RadioButton();
-        radioButton3.setText("Number of request by client");
+        radioButton3.setText("Number of clients");
         radioButton3.setToggleGroup(toggleGroup);
 
 
@@ -150,7 +150,7 @@ public class GUI extends Application {
                 } else if (radioButton2.equals(selectedToggle)) {
                     runSettings.typeOfVariableToChange = TypeOfVariableToChange.SLEEP_TIME_AFTER_RESPONSE;
                 } else if (radioButton3.equals(selectedToggle)) {
-                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.NUMBER_OF_REQUEST_BY_CLIENT;
+                    runSettings.typeOfVariableToChange = TypeOfVariableToChange.NUMBER_OF_CLIENTS;
                 } else if (radioButton4.equals(selectedToggle)) {
                     runSettings.typeOfVariableToChange = TypeOfVariableToChange.NONE;
                 } else {
