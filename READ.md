@@ -16,9 +16,7 @@ run/src/main/ru/ifmo/java/run/GUI
 ## Localhost and other
 common/src/main/java/ru/ifmo/java/common/Constant.java
 содержит адрес (serverHost), на котором открывается сервер. 
-Для тестирования не на localhost, просто поменяйте его на необходимый.
-Я тестировал подключаясь по ssh к другому компьютеру,
-и запуская сервер на другом компьютере со своего с помощью IDEA.
+Изначально localhost, там есть комментарий с ip-ком. 
 
 #Отчет с графиками.
 ./graphics.html

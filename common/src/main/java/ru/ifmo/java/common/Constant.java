@@ -8,8 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Constant {
-    //public static final String serverHost = "localhost";
-    public static final String serverHost = "18.216.180.203";
+    public static final String serverHost = "localhost";
+//    public static final String serverHost = "18.191.106.182";
 
     public static final int numberThreadOfServerPool = 1;
     public static final int serverSocketTimeout = 1 * 1000;
