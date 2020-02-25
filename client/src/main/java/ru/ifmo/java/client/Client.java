@@ -42,7 +42,12 @@ public class Client implements Runnable {
         meanOneRequestByClient.start = System.currentTimeMillis();
         try {
             for (int i = 0; i < clientsSettings.clientSettings.numberOfRequestByClient; i++) {
-                sendOneRequest();
+                try {
+                    sendOneRequest();
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
             }
         } finally {
             try {
@@ -72,31 +77,19 @@ public class Client implements Runnable {
                 clientProcessing.delta());
     }
 
-    private void sendOneRequest() {
+    private void sendOneRequest() throws InterruptedException, IOException {
         List<Integer> list = generateRandomValues();
         Request request = Request.newBuilder()
                 .addAllNumber(list)
                 .build();
 
-        try {
-            Response response = server.send(request);
-            setTimestampFromServer(response);
-            assert check(list, response.getNumberList());
-        } catch (IOException e) {
-            e.printStackTrace(); // io problems with one request
-        }
+        Response response = server.send(request);
+        setTimestampFromServer(response);
+        assert check(list, response.getNumberList());
 
-        try {
-            writeTimestampByRequest();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeTimestampByRequest();
 
-        try {
-            Thread.sleep(clientsSettings.clientSettings.sleepTimeAfterResponse);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(clientsSettings.clientSettings.sleepTimeAfterResponse);
     }
 
     private void setTimestampFromServer(Response response) {
