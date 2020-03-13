@@ -1,8 +1,8 @@
 package ru.ifmo.java.client;
 
-import ru.ifmo.java.client.metrics.MetricType;
 import ru.ifmo.java.client.metrics.MetricsWriterForOneClient;
 import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.enums.MetricType;
 import ru.ifmo.java.common.protocol.Protocol.Request;
 import ru.ifmo.java.common.protocol.Protocol.Response;
 import ru.ifmo.java.common.utils.PairOfTime;

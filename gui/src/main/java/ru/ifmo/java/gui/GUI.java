@@ -1,4 +1,4 @@
-package ru.ifmo.java.run;
+package ru.ifmo.java.gui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -12,13 +12,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.graalvm.compiler.nodes.virtual.VirtualBoxingNode;
-import ru.ifmo.java.client.metrics.MetricType;
 import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.enums.MetricType;
 import ru.ifmo.java.common.enums.ServerType;
 import ru.ifmo.java.common.enums.TypeOfVariableToChange;
 import ru.ifmo.java.common.utils.Point;
-import ru.ifmo.java.run.utils.GUIChart;
+import ru.ifmo.java.gui.utils.GUIChart;
 import ru.ifmo.java.run.utils.RunOneClientsBunch;
 import ru.ifmo.java.run.utils.RunSettings;
 
@@ -34,7 +33,7 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-// MOCK. It will be better. Do some refactoring later
+
 public class GUI extends Application {
 
     private RunSettings settings = new RunSettings();

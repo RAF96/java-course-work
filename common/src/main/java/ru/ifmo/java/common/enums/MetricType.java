@@ -1,4 +1,4 @@
-package ru.ifmo.java.client.metrics;
+package ru.ifmo.java.common.enums;
 
 public enum MetricType {
     REQUEST_PROCESSING,

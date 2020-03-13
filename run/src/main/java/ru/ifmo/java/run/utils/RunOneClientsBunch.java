@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ifmo.java.client.ClientMaker;
 import ru.ifmo.java.client.ClientsSettings;
-import ru.ifmo.java.client.metrics.MetricType;
 import ru.ifmo.java.client.metrics.MetricsWriterForOneClient;
 import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.enums.MetricType;
 import ru.ifmo.java.common.enums.TypeOfVariableToChange;
 
 import java.io.*;

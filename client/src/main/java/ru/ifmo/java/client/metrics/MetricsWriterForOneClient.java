@@ -2,6 +2,7 @@ package ru.ifmo.java.client.metrics;
 
 import org.apache.commons.io.FileUtils;
 import ru.ifmo.java.common.Constant;
+import ru.ifmo.java.common.enums.MetricType;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

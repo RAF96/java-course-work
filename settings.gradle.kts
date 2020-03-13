@@ -6,4 +6,4 @@ include("client")
 include("notBlockingServer")
 include("individualThreadServer")
 include("blockingServer")
-
+include("gui")

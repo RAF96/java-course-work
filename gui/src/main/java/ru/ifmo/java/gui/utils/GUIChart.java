@@ -1,4 +1,4 @@
-package ru.ifmo.java.run.utils;
+package ru.ifmo.java.gui.utils;
 
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.LineChart;
